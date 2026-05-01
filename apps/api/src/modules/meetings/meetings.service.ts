@@ -2,10 +2,14 @@ import { Injectable } from '@nestjs/common';
 import { CreateMeetingDto, MeetingStatus, UpdateMeetingStatusDto } from '@meeting-intelligence/shared';
 import type { AuthUser } from '../common/auth-user.interface';
 import { MeetingsRepository } from './meetings.repository';
+import { StorageService } from '../storage/storage.service';
 
 @Injectable()
 export class MeetingsService {
-  constructor(private readonly meetingsRepository: MeetingsRepository) {}
+  constructor(
+    private readonly meetingsRepository: MeetingsRepository,
+    private readonly storage: StorageService,
+  ) {}
 
   create(authUser: AuthUser, payload: CreateMeetingDto) {
     return this.meetingsRepository.create({
@@ -33,11 +37,14 @@ export class MeetingsService {
 
   async createUploadSession(authUser: AuthUser, meetingId: string, fileName: string, contentType: string) {
     await this.meetingsRepository.ensureMeetingExists(authUser, meetingId);
+    const key = `meetings/${meetingId}/${Date.now()}-${encodeURIComponent(fileName)}`;
+    const uploadUrl = await this.storage.getPresignedUploadUrl(key, contentType);
     return {
       meetingId,
       fileName,
       contentType,
-      uploadUrl: `https://uploads.hyperbuild.local/meetings/${meetingId}/${encodeURIComponent(fileName)}`,
+      storageKey: key,
+      uploadUrl,
       expiresInSeconds: 900,
     };
   }

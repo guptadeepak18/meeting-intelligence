@@ -11,6 +11,8 @@
     "test": "vitest run"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.1040.0",
+    "@aws-sdk/s3-request-presigner": "^3.1040.0",
     "@meeting-intelligence/config": "workspace:*",
     "@meeting-intelligence/shared": "workspace:*",
     "@nestjs/common": "^10.4.4",

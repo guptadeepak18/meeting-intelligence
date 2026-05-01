@@ -10,6 +10,7 @@ import { PrismaModule } from './modules/prisma/prisma.module';
 import { TasksModule } from './modules/tasks/tasks.module';
 import { TranscriptsModule } from './modules/transcripts/transcripts.module';
 import { ComplianceModule } from './modules/compliance/compliance.module';
+import { StorageModule } from './modules/storage/storage.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { ComplianceModule } from './modules/compliance/compliance.module';
     DashboardModule,
     AiModule,
     ComplianceModule,
+    StorageModule,
   ],
   controllers: [HealthController],
 })
