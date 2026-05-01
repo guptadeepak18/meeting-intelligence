@@ -1,6 +1,13 @@
 const API_BASE =
   process.env.NEXT_PUBLIC_API_BASE_URL?.replace(/\/$/, '') ?? 'http://localhost:4000/api/v1';
 
+type AuthTokenGetter = () => Promise<string | null>;
+let authTokenGetter: AuthTokenGetter | null = null;
+
+export function setApiAuthTokenGetter(getter: AuthTokenGetter | null) {
+  authTokenGetter = getter;
+}
+
 export interface MeetingListItem {
   id: string;
   title: string;
@@ -107,13 +114,29 @@ const DEV_HEADERS = {
 };
 
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
+  const token = authTokenGetter ? await authTokenGetter() : null;
+  const isProduction = process.env.NODE_ENV === 'production';
+  const headers = new Headers(init?.headers);
+
+  if (!headers.has('Content-Type')) {
+    headers.set('Content-Type', 'application/json');
+  }
+
+  if (!isProduction) {
+    for (const [headerName, headerValue] of Object.entries(DEV_HEADERS)) {
+      if (!headers.has(headerName)) {
+        headers.set(headerName, headerValue);
+      }
+    }
+  }
+
+  if (token) {
+    headers.set('Authorization', `Bearer ${token}`);
+  }
+
   const response = await fetch(`${API_BASE}${path}`, {
     ...init,
-    headers: {
-      'Content-Type': 'application/json',
-      ...DEV_HEADERS,
-      ...(init?.headers ?? {}),
-    },
+    headers,
     cache: 'no-store',
   });
 
