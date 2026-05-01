@@ -9,8 +9,10 @@ export class ClerkAuthGuard implements CanActivate {
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest<AuthenticatedRequest>();
     const authHeader = request.headers.authorization;
+    const allowDevIdentityHeaders =
+      process.env.NODE_ENV !== 'production' || process.env.ALLOW_DEV_HEADERS_IN_PRODUCTION === 'true';
 
-    if ((!authHeader || Array.isArray(authHeader)) && process.env.NODE_ENV !== 'production') {
+    if ((!authHeader || Array.isArray(authHeader)) && allowDevIdentityHeaders) {
       const devUserId = request.headers['x-dev-user-id'];
       const devOrgId = request.headers['x-dev-org-id'];
       const devRole = request.headers['x-dev-role'];
