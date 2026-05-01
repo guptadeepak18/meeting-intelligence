@@ -4,12 +4,18 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { z } from 'zod';
 
 const bootstrapEnvSchema = z.object({
-  API_PORT: z.coerce.number().int().positive().default(4000),
+  PORT: z.coerce.number().int().positive().optional(),
+  API_PORT: z.coerce.number().int().positive().optional(),
   CLERK_JWT_ISSUER: z.string().url(),
 });
 
 export function parseBootstrapEnv() {
-  return bootstrapEnvSchema.parse(process.env);
+  const env = bootstrapEnvSchema.parse(process.env);
+  return {
+    ...env,
+    // Railway injects PORT; fall back to API_PORT then 4000
+    API_PORT: env.API_PORT ?? env.PORT ?? 4000,
+  };
 }
 
 export async function configureApp(app: INestApplication) {
