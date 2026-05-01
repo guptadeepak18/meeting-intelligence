@@ -3,11 +3,6 @@
   "installCommand": "cd ../.. && pnpm install --prod=false",
   "buildCommand": "cd ../.. && pnpm --filter @meeting-intelligence/db db:generate && pnpm --filter @meeting-intelligence/api build",
   "framework": null,
-  "functions": {
-    "api/[...path].ts": {
-      "runtime": "nodejs20.x"
-    }
-  },
   "rewrites": [
     {
       "source": "/",
