@@ -9,7 +9,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule, { cors: true });
   await configureApp(app);
 
-  const port = env.API_PORT;
+  const port = Number(process.env.PORT) || env.API_PORT;
   await app.listen(port);
   Logger.log(`API listening on http://localhost:${port}/api/v1`, 'Bootstrap');
 }
