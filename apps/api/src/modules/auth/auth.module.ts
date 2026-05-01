@@ -8,6 +8,6 @@ import { RbacGuard } from './guards/rbac.guard';
 @Module({
   controllers: [AuthController],
   providers: [AuthService, ClerkJwtService, ClerkAuthGuard, RbacGuard],
-  exports: [ClerkAuthGuard, RbacGuard],
+  exports: [ClerkJwtService, ClerkAuthGuard, RbacGuard],
 })
 export class AuthModule {}
