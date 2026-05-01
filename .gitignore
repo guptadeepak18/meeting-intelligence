@@ -10,6 +10,5 @@ coverage/
 !.env.production.example
 .turbo/cache/
 *.tsbuildinfo
-pnpm-lock.yaml
 *.log
 .vercel/
