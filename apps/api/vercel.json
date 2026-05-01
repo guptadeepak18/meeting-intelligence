@@ -3,10 +3,12 @@
   "installCommand": "cd ../.. && pnpm install --prod=false",
   "buildCommand": "cd ../.. && pnpm --filter @meeting-intelligence/db db:generate && pnpm --filter @meeting-intelligence/api build",
   "framework": null,
-  "rewrites": [
-    {
-      "source": "/",
-      "destination": "/api/health"
+  "functions": {
+    "api/index.js": {
+      "includeFiles": "dist/**"
     }
+  },
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/api/index" }
   ]
 }
