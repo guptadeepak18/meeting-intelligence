@@ -1,0 +1,35 @@
+:root {
+  --bg: #f7f6f2;
+  --surface: #fffdf8;
+  --ink: #111111;
+  --accent: #0b6e4f;
+  --accent-soft: #d6f5ea;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "IBM Plex Sans", "Segoe UI", sans-serif;
+  color: var(--ink);
+  background: radial-gradient(circle at top right, #fff6d2 0%, var(--bg) 52%);
+}
+
+a {
+  color: inherit;
+}
+
+main {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 1.5rem;
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid #ece7db;
+  border-radius: 14px;
+  padding: 1rem;
+}

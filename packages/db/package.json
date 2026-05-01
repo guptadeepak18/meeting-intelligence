@@ -1,0 +1,23 @@
+{
+  "name": "@meeting-intelligence/db",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "build": "echo \"Database package has no build output yet\"",
+    "lint": "echo \"No db lint yet\"",
+    "typecheck": "echo \"No db typecheck yet\"",
+    "test": "echo \"No db tests yet\"",
+    "db:generate": "prisma generate",
+    "db:migrate": "prisma migrate dev",
+    "db:migrate:deploy": "prisma migrate deploy",
+    "db:reset": "prisma migrate reset --force",
+    "db:seed": "tsx prisma/seed.ts"
+  },
+  "dependencies": {
+    "@prisma/client": "^5.20.0"
+  },
+  "devDependencies": {
+    "prisma": "^5.20.0",
+    "tsx": "^4.19.1"
+  }
+}
