@@ -1,36 +1,13 @@
 import 'reflect-metadata';
-import { Logger, ValidationPipe, VersioningType } from '@nestjs/common';
+import { Logger } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
-import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { z } from 'zod';
 import { AppModule } from './app.module';
-
-const bootstrapEnvSchema = z.object({
-  API_PORT: z.coerce.number().int().positive().default(4000),
-  CLERK_JWT_ISSUER: z.string().url(),
-});
+import { configureApp, parseBootstrapEnv } from './bootstrap';
 
 async function bootstrap() {
-  const env = bootstrapEnvSchema.parse(process.env);
+  const env = parseBootstrapEnv();
   const app = await NestFactory.create(AppModule, { cors: true });
-  app.setGlobalPrefix('api');
-  app.enableVersioning({ type: VersioningType.URI, defaultVersion: '1' });
-  app.useGlobalPipes(
-    new ValidationPipe({
-      whitelist: true,
-      transform: true,
-      forbidNonWhitelisted: true,
-    }),
-  );
-
-  const config = new DocumentBuilder()
-    .setTitle('Meeting Intelligence API')
-    .setDescription('Backend API scaffold for meeting intelligence workflows')
-    .setVersion('1.0.0')
-    .build();
-
-  const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api/docs', app, document);
+  await configureApp(app);
 
   const port = env.API_PORT;
   await app.listen(port);
